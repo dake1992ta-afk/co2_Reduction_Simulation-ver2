@@ -1,20 +1,15 @@
-# GitHub Pages へのシンプルなデプロイワークフロー
 name: Deploy Vite project to Pages
 
 on:
-  # main ブランチへのプッシュ時に実行される
   push:
     branches: ["main"]
-  # Actions タブから手動でワークフローを実行できるようにする
   workflow_dispatch:
 
-# GITHUB_TOKEN のパーミッションを設定し、GitHub Pages へのデプロイを許可する
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 一度に一つのデプロイメントのみを許可する
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -30,17 +25,27 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+          # キャッシュ用のロックファイルのパスも正しく指定します
+          cache-dependency-path: co2_Reduction_Simulation-ver2/package-lock.json
+
       - name: Install dependencies
+        # ここで作業フォルダを指定します
+        working-directory: ./co2_Reduction_Simulation-ver2
         run: npm install
+
       - name: Build
+        # ここでも作業フォルダを指定します
+        working-directory: ./co2_Reduction_Simulation-ver2
         run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # ルートにある dist フォルダからアップロード
-          path: './dist'
+          # ビルド成果物(dist)のパスを正しく指定します
+          path: './co2_Reduction_Simulation-ver2/dist'
   
   deploy:
     environment:
