@@ -2,7 +2,7 @@
 name: Deploy Vite project to Pages
 
 on:
-  # main ブランチへのプUSH時に実行される
+  # main ブランチへのプッシュ時に実行される
   push:
     branches: ["main"]
   # Actions タブから手動でワークフローを実行できるようにする
@@ -20,14 +20,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # ビルドジョブ
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # 変更点
+        uses: actions/checkout@v4
       - name: Set up Node
-        uses: actions/setup-node@v4 # 変更点
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
@@ -36,13 +35,13 @@ jobs:
       - name: Build
         run: npm run build
       - name: Setup Pages
-        uses: actions/configure-pages@v4 # 変更点
+        uses: actions/configure-pages@v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3 # 変更点
+        uses: actions/upload-pages-artifact@v3
         with:
+          # ルートにある dist フォルダからアップロード
           path: './dist'
   
-  # デプロイジョブ
   deploy:
     environment:
       name: github-pages
@@ -52,4 +51,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # 変更点
+        uses: actions/deploy-pages@v4
